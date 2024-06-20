@@ -25,7 +25,7 @@ async def websocket_endpoint(websocket: WebSocket, username: str):
             await manager.broadcast(message)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        # await manager.broadcast(f"{username} left the chat")
+        print(f"{username} disconnected.")
     except Exception as e:
         manager.disconnect(websocket)
         print(f"Error: {e}")
