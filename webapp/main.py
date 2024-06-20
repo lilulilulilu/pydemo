@@ -14,9 +14,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.websocket("/ws/{username}")
 async def websocket_endpoint(websocket: WebSocket, username: str):
-    '''
-    Handle websocket connections and broadcast messages to all connected clients.
-    '''
+    """Handle websocket connections and broadcast messages to all connected clients."""
     await manager.connect(websocket, username)
     try:
         while True:
@@ -34,9 +32,7 @@ async def websocket_endpoint(websocket: WebSocket, username: str):
 
 @app.get("/", response_class=HTMLResponse)
 def read_index(request: Request):
-    '''
-    This is a web page for testing the websocket_endpoint.
-    ''' 
+    """This is a web page for testing the websocket_endpoint.""" 
     return templates.TemplateResponse("index.html", {"request" : request})
 
 
