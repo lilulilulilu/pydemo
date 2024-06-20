@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 import uvicorn
+
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from connection.manager import ConnectionManager
@@ -13,6 +14,9 @@ templates = Jinja2Templates(directory="templates")
 
 @app.websocket("/ws/{username}")
 async def websocket_endpoint(websocket: WebSocket, username: str):
+    '''
+    Handle websocket connections and broadcast messages to all connected clients.
+    '''
     await manager.connect(websocket, username)
     try:
         while True:
