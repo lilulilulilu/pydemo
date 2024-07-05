@@ -1,3 +1,4 @@
+import asyncio
 import uvicorn
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
@@ -18,9 +19,12 @@ async def websocket_endpoint(websocket: WebSocket, username: str):
     await manager.connect(websocket, username)
     try:
         while True:
-            data = await websocket.receive_text()
+            data = await asyncio.wait_for(websocket.receive_text(), timeout=30)
             message = f"{manager.usernames[websocket]}: {data}"
             await manager.broadcast(message)
+    except asyncio.TimeoutError:
+        manager.disconnect(websocket)
+        print(f"{username} timed out.")
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         print(f"{username} disconnected.")
